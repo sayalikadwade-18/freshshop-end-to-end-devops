@@ -1,0 +1,43 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'freebird2318-coder',
+                    url: 'https://github.com/freebird2318-coder/freshshop-master-CICD-jenkins-sonarqube-docker.git'
+            }
+        }
+
+        stage('Deploy To Docker Server') {
+            steps {
+                sshagent(['docker-creds']) {
+
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.206.100.189 "mkdir -p ~/website"
+
+                        scp -o StrictHostKeyChecking=no -r freshshop-master ubuntu@52.206.100.189:~/website/
+
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.206.100.189 "
+                            cd ~/website/freshshop-master
+
+                            docker rm -f freshshop-master1 || true
+
+                            docker build -t mywebsite1 .
+
+                            docker run -d \
+                                -p 8086:80 \
+                                --name freshshop-master1 \
+                                mywebsite1
+                        "
+
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.206.100.189 "docker ps"
+                    '''
+                }
+            }
+        }
+    }
+}

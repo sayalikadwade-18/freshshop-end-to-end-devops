@@ -1,0 +1,84 @@
+pipeline {
+
+    agent any
+
+    environment {
+        SONAR_PROJECT_KEY = "freshshop-master"
+        REMOTE_HOST = "ubuntu@54.83.148.238"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'freebird2318-coder',
+                    url: 'https://github.com/freebird2318-coder/freshshop-master-CICD-jenkins-sonarqube-docker.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Running SonarQube Analysis'
+
+                withSonarQubeEnv('sonar-srv') {
+                    script {
+                        def scannerHome = tool 'sonarqube-scanner'
+
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                        -Dsonar.projectName=${SONAR_PROJECT_KEY} \
+                        -Dsonar.sources=. \
+                        -Dsonar.sourceEncoding=UTF-8
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy To Docker Server') {
+            steps {
+
+                sshagent(['docker-creds']) {
+
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} '
+                        mkdir -p ~/website
+                    '
+
+                    rsync -av --delete \
+                    --exclude=".git" \
+                    --exclude=".scannerwork" \
+                    ./ ${REMOTE_HOST}:~/website/
+
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} '
+                        cd ~/website
+
+                        docker rm -f freshshop-master1 || true
+
+                        docker build -t mywebsite .
+
+                        docker run -d \
+                            --name freshshop-master1 \
+                            -p 8086:80 \
+                            mywebsite
+
+                        docker ps
+                    '
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful'
+        }
+
+        failure {
+            echo 'Deployment Failed'
+        }
+    }
+}
