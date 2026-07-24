@@ -359,5 +359,5 @@ The SonarQube-enabled pipeline performs:
 
 ## 👤 Author
 
-*Harshvardhan Sutar*
+*Sayali kadwade*
 DevOps Engineer
