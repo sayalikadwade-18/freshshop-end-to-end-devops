@@ -171,7 +171,7 @@ AWS Application Load Balancer
 ├── Jenkinsfile-sonarqube    # Pipeline with SonarQube static code analysis
 ├── Dockerfile
 ├── README.md
-├── fruitkha-1.0.0/
+├── freshshop-master/
 ├── assets/
 └── images/
 
@@ -240,7 +240,7 @@ COPY . /usr/share/nginx/html/
 Jenkins copies application files to the Docker server using SCP:
 
 bash
-scp -r ./fruitkha-1.0.0 ubuntu@<DOCKER_SERVER_IP>:~/website/
+scp -r ./freshshop-master ubuntu@<DOCKER_SERVER_IP>:~/website/
 
 
 ### Step 9 — Build Docker Image
@@ -252,7 +252,7 @@ docker build -t mywebsite .
 ### Step 10 — Run Docker Container
 
 bash
-docker run -d -p 8085:80 --name fruitkha-website mywebsite
+docker run -d -p 8085:80 --name freshshop-master mywebsite
 
 
 ### Step 11 — Configure AWS Application Load Balancer (ALB)
