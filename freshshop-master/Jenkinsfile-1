@@ -61,7 +61,7 @@ pipeline {
 
                         docker run -d \
                             --name freshshop-master1 \
-                            -p 8086:80 \
+                            -p 8085:80 \
                             mywebsite
 
                         docker ps
