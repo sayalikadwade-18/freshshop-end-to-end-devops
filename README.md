@@ -1,4 +1,4 @@
-# 🚀 End-to-End CI/CD Pipeline with Jenkins, SonarQube, Docker & AWS
+# ☁️ CloudDeploy: Automated CI/CD Pipeline with Jenkins, Docker & AWS
 
 ![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-D24939?logo=jenkins&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Container-2496ED?logo=docker&logoColor=white)
