@@ -1,0 +1,80 @@
+pipeline {
+
+    agent any
+
+
+    stages {
+
+
+        stage('Checkout Code') {
+
+            steps {
+
+                git branch: 'main',
+                credentialsId: 'sayalikadwade-18',
+                url: 'https://github.com/sayalikadwade-18/freshshop-end-to-end-devops.git'
+
+            }
+        }
+
+
+
+        stage('Deploy To Docker Server') {
+
+            steps {
+
+
+                sshagent(['ubuntu_docker']) {
+
+
+                    sh '''
+
+                    ssh -o StrictHostKeyChecking=no ubuntu@67.202.45.65 "
+                    mkdir -p ~/website3
+                    "
+
+
+                    scp -o StrictHostKeyChecking=no -r \
+                   freshshop-master \
+                    ubuntu@67.202.45.65:~/website3/
+
+
+                    ssh -o StrictHostKeyChecking=no ubuntu@67.202.45.65 "
+
+                    cd ~/website/freshshop-master
+
+
+                    docker rm -f freshshop-master || true
+
+
+                    docker build -t mywebsite3 .
+
+
+                    docker run -d \
+                    -p 8085:80 \
+                    --name freshshop-master \
+                    mywebsite3
+
+
+                    "
+
+
+                    ssh -o StrictHostKeyChecking=no ubuntu@67.202.45.65 "
+
+                    docker ps
+
+                    "
+
+
+                    '''
+
+                }
+
+            }
+
+        }
+
+
+    }
+
+}
