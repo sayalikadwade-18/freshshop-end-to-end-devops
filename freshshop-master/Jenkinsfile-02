@@ -28,7 +28,7 @@ stage('Deploy To Docker Servers') {
                     docker build -t mywebsite1 .
 
                     docker run -d \
-                    -p 8086:80 \
+                    -p 8085:80 \
                     --name freshshop-master \
                     mywebsite1
 
@@ -75,7 +75,7 @@ stage('Deploy To Docker Servers') {
 
 
                     docker run -d \
-                    -p 8086:80 \
+                    -p 8085:80 \
                     --name freshshop-master \
                     mywebsite1
 
