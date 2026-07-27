@@ -57,12 +57,12 @@ pipeline {
 
                         docker rm -f freshshop-master1 || true
 
-                        docker build -t mywebsite .
+                        docker build -t mywebsite3 .
 
                         docker run -d \
                             --name freshshop-master1 \
                             -p 8085:80 \
-                            mywebsite
+                            mywebsite3
 
                         docker ps
                     '
